@@ -5,7 +5,7 @@ import './provide/counter.dart';
 import './provide/child_category_provide.dart';
 import './provide/category_goods_list_provide.dart';
 
-//测试
+// 测试一下
 void main() {
   var counter = Counter();
   var childCategoryProvide = ChildCategoryProvide();
