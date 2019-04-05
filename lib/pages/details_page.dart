@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provide/provide.dart';
 import '../provide/details_provide.dart';
 import './details_component/details_top_area.dart';
+import './details_component/details_description.dart';
+import './details_component/details_tabbar.dart';
+import './details_component/details_web.dart';
 
 class DetailsPage extends StatelessWidget {
 
@@ -26,9 +29,12 @@ class DetailsPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-              child: Column(
+              child: ListView(
                 children: <Widget>[
-                  DetailsTopArea()
+                  DetailsTopArea(),
+                  DetailsDescription(),
+                  DetailsTabbar(),
+                  DetailsWeb()
                 ],
               ),
             );
