@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provide/provide.dart';
+import '../../provide/cart_provide.dart';
 
 class CartBottom extends StatelessWidget {
   @override
@@ -7,8 +9,16 @@ class CartBottom extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(5),
       color: Colors.white,
-      child: Row(
-        children: <Widget>[_selectAllBtn(), _allPrice(), _goButton()],
+      child: Provide<CartProvide>(
+        builder: (context, child, val) {
+          return Row(
+            children: <Widget>[
+              _selectAllBtn(),
+              _allPrice(context),
+              _goButton(context)
+            ],
+          );
+        },
       ),
     );
   }
@@ -29,7 +39,8 @@ class CartBottom extends StatelessWidget {
     );
   }
 
-  Widget _allPrice() {
+  Widget _allPrice(context) {
+    double totalPrice = Provide.value<CartProvide>(context).totalPrice;
     return Container(
       width: ScreenUtil().setWidth(430),
       child: Column(
@@ -48,7 +59,7 @@ class CartBottom extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 width: ScreenUtil().setWidth(150),
                 child: Text(
-                  '￥ 1992',
+                  '￥ $totalPrice',
                   style: TextStyle(
                       fontSize: ScreenUtil().setSp(36), color: Colors.red),
                 ),
@@ -69,7 +80,8 @@ class CartBottom extends StatelessWidget {
     );
   }
 
-  Widget _goButton() {
+  Widget _goButton(context) {
+    int totalCount = Provide.value<CartProvide>(context).totalCount;
     return Container(
       width: ScreenUtil().setWidth(160),
       padding: EdgeInsets.only(left: 10),
@@ -81,7 +93,7 @@ class CartBottom extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(3)),
           child: Text(
-            '结算（6）',
+            '结算（$totalCount）',
             style: TextStyle(color: Colors.white),
           ),
         ),

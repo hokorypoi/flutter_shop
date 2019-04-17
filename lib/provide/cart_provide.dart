@@ -6,6 +6,8 @@ import '../model/cart_info.dart';
 class CartProvide with ChangeNotifier {
   String cartString = '[]';
   List<CartInfoModel> cartList = [];
+  double totalPrice = 0;
+  int totalCount = 0;
 
   save(goodsId, goodsName, count, price, images) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -28,7 +30,8 @@ class CartProvide with ChangeNotifier {
       'goodsName': goodsName,
       'count': count,
       'price': price,
-      'images': images
+      'images': images,
+      'isCheck': true
     };
 
     if (!exists) {
@@ -56,13 +59,36 @@ class CartProvide with ChangeNotifier {
     cartString = prefs.getString('cartInfo');
     cartList = [];
     if (cartString == null) {
-      
     } else {
       List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+      totalCount = 0;
+      totalPrice = 0;
       tempList.forEach((item) {
         cartList.add(CartInfoModel.fromJson(item));
+        if (item['isCheck']) {
+          totalCount += item['count'];
+          totalPrice += (item['count'] * item['price']);
+        }
       });
     }
     notifyListeners();
+  }
+
+  deleteGoods(String goodsId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cartString = prefs.getString('cartInfo');
+    List<Map> tempList = (json.decode(cartString.toString()) as List).cast();
+    int i = 0;
+    int index = -1;
+    tempList.forEach((item) {
+      if (item['goodsId'] == goodsId) {
+        index = i;
+      }
+      i++;
+    });
+    tempList.removeAt(index);
+    cartString = json.encode(tempList).toString();
+    prefs.setString('cartInfo', cartString);
+    getCartInfo();
   }
 }
