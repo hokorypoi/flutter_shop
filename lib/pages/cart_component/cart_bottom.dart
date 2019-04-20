@@ -13,7 +13,7 @@ class CartBottom extends StatelessWidget {
         builder: (context, child, val) {
           return Row(
             children: <Widget>[
-              _selectAllBtn(),
+              _selectAllBtn(context),
               _allPrice(context),
               _goButton(context)
             ],
@@ -24,14 +24,17 @@ class CartBottom extends StatelessWidget {
   }
 
   // 全选按钮
-  Widget _selectAllBtn() {
+  Widget _selectAllBtn(context) {
+    bool isAllCheck = Provide.value<CartProvide>(context).isAllCheck;
     return Container(
       child: Row(
         children: <Widget>[
           Checkbox(
-            value: true,
+            value: isAllCheck,
             activeColor: Colors.pink,
-            onChanged: (bool val) {},
+            onChanged: (bool val) {
+              Provide.value<CartProvide>(context).changeAllCheckBtnState(val);
+            },
           ),
           Text('全选')
         ],
@@ -49,7 +52,7 @@ class CartBottom extends StatelessWidget {
             children: <Widget>[
               Container(
                 alignment: Alignment.centerRight,
-                width: ScreenUtil().setHeight(280),
+                width: ScreenUtil().setHeight(230),
                 child: Text(
                   '合计',
                   style: TextStyle(fontSize: ScreenUtil().setSp(36)),
@@ -57,7 +60,7 @@ class CartBottom extends StatelessWidget {
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                width: ScreenUtil().setWidth(150),
+                width: ScreenUtil().setWidth(200),
                 child: Text(
                   '￥ $totalPrice',
                   style: TextStyle(
@@ -83,7 +86,7 @@ class CartBottom extends StatelessWidget {
   Widget _goButton(context) {
     int totalCount = Provide.value<CartProvide>(context).totalCount;
     return Container(
-      width: ScreenUtil().setWidth(160),
+      width: ScreenUtil().setWidth(200),
       padding: EdgeInsets.only(left: 10),
       child: InkWell(
         onTap: () {},
